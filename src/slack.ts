@@ -20,7 +20,7 @@ export class SlackChannel {
     const personal = "個人の ~/.config/ss/env に書く";
     return new SlackChannel(
       requireEnv("SS_SLACK_BOT_TOKEN", personal),
-      requireEnv("SS_SLACK_CHANNEL_ID", "リポジトリの .claude/settings.json の env に書く"),
+      requireEnv("SS_SLACK_CHANNEL_ID", "~/.config/ss/env か .claude/settings.json の env に書く"),
       { name: requireEnv("SS_AUTHOR_NAME", personal), iconUrl: requireEnv("SS_AUTHOR_ICON_URL", personal) },
     );
   }

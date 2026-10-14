@@ -8,7 +8,7 @@
     {
       "name": "ss",
       "source": "./",
-      "description": "Claude Code での発言を Slack チャンネルに流す"
+      "description": "Claude Code / Codex での発言を Slack チャンネルに流す"
     }
   ]
 }

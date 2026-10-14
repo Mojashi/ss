@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun --env-file=\"$HOME/.config/ss/env\" \"${PLUGIN_ROOT}/src/hooks/user-prompt.ts\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

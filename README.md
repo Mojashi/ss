@@ -1,4 +1,4 @@
-# ss — Claude Code での発言を Slack に流す plugin
+# ss — Claude Code / Codex での発言を Slack に流す plugin
 
 ユーザーの発言を、発言ごとにチャンネルへそのまま投稿する(スレッドにはしない)。
 
@@ -8,9 +8,45 @@
 - AI の応答は載せない
 - gitleaks が失敗したら投稿しない
 
-## リポジトリで有効にする(コミットして共有)
+## セットアップ(各メンバー1回だけ)
 
-`<repo>/.claude/settings.json`:
+Claude Code と Codex のうち、入っている方に入れる。
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/Mojashi/ss/master/setup.sh | bash -s -- <SLACK_CHANNEL_ID>
+```
+
+やること:
+
+1. gitleaks・bun がなければ入れる
+2. bot token・表示名・アイコン URL を聞いて `~/.config/ss/env` に保存する(アイコンは `gh` があれば GitHub のアバター)
+3. Claude Code / Codex に plugin を入れる
+
+再起動すると発言が投稿される。Codex は初回に hook の信頼確認が出るので許可する。
+
+止めるとき: Claude Code は `/plugin disable ss@ss`、Codex は `codex plugin remove ss@ss`。
+
+### 手動で入れる場合
+
+`~/.config/ss/env`(chmod 600):
+
+```
+SS_SLACK_BOT_TOKEN=xoxb-...
+SS_AUTHOR_NAME=表示名
+SS_AUTHOR_ICON_URL=https://avatars.githubusercontent.com/u/...
+SS_SLACK_CHANNEL_ID=C0XXXX
+```
+
+```sh
+# Claude Code
+claude plugin marketplace add Mojashi/ss && claude plugin install ss@ss
+# Codex
+codex plugin marketplace add Mojashi/ss && codex plugin add ss@ss
+```
+
+### 特定リポジトリだけで有効にする(Claude Code)
+
+`<repo>/.claude/settings.json` にコミットすると、開いたメンバーにインストールが促される。`env` はリポジトリごとに投稿先を変えたいときだけ(`~/.config/ss/env` より優先)。
 
 ```json
 {
@@ -21,34 +57,6 @@
   "env": { "SS_SLACK_CHANNEL_ID": "C0XXXX" }
 }
 ```
-
-メンバーはそのリポジトリを開いて信頼すると plugin のインストールを促される。
-
-## 個人で全プロジェクトに入れる
-
-Claude Code の中で:
-
-```
-/plugin marketplace add Mojashi/ss
-/plugin install ss@ss
-```
-
-`~/.claude/settings.json` に `"env": { "SS_SLACK_CHANNEL_ID": "C0XXXX" }` を足す。止めるときは `/plugin disable ss@ss`。
-
-## 各メンバーの準備(1回だけ)
-
-```sh
-brew install gitleaks   # bun も必要
-mkdir -p ~/.config/ss && chmod 700 ~/.config/ss
-cat > ~/.config/ss/env <<'EOF'
-SS_SLACK_BOT_TOKEN=xoxb-...
-SS_AUTHOR_NAME=表示名
-SS_AUTHOR_ICON_URL=https://avatars.githubusercontent.com/u/...
-EOF
-chmod 600 ~/.config/ss/env
-```
-
-`SS_AUTHOR_ICON_URL` は `gh api user --jq .avatar_url` で取れる。
 
 ## 投稿前に見え方を確認
 
