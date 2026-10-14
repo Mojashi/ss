@@ -1,0 +1,14 @@
+{
+  "name": "ss",
+  "description": "Claude Code のセッションを Slack に共有する plugin",
+  "owner": {
+    "name": "Akihiro Omori"
+  },
+  "plugins": [
+    {
+      "name": "ss",
+      "source": "./",
+      "description": "Claude Code での発言を Slack チャンネルに流す"
+    }
+  ]
+}
