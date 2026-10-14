@@ -14,10 +14,13 @@ test("システムが差し込むタグ付きメッセージは流さない", ()
   expect(isWorthRelaying("  <local-command-caveat>Caveat: ...</local-command-caveat>")).toBe(false);
 });
 
-test("日本語を含まない長文は流さない", () => {
+test("ほとんど英語の長文は、日本語が少し混ざっていても流さない", () => {
   expect(isWorthRelaying("Error: something failed at line 1. ".repeat(10))).toBe(false);
+  expect(isWorthRelaying("このエラーなに？ " + "Error: something failed. ".repeat(10))).toBe(false);
 });
 
-test("日本語が混ざった長文は流す", () => {
-  expect(isWorthRelaying("このエラーなに？ " + "Error: something failed. ".repeat(10))).toBe(true);
+test("英語が混ざっていても日本語が主の長文は流す", () => {
+  const prompt = "src/hooks/user-prompt.ts の relay を呼ぶ前に isWorthRelaying で判定して、流さない発言はスキップするようにしたい。".repeat(3);
+  expect(prompt.length).toBeGreaterThanOrEqual(200);
+  expect(isWorthRelaying(prompt)).toBe(true);
 });
