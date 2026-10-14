@@ -2,7 +2,9 @@
 
 ユーザーの発言を、発言ごとにチャンネルへそのまま投稿する(スレッドにはしない)。
 
-- 全文を載せる。gitleaks で秘密情報を `[REDACTED:rule]` に置換する
+- 全文を載せる。gitleaks で秘密情報を `[REDACTED:rule]` に置換する(画像の中身は検査できない)
+- 貼った画像も一緒に載せる(Claude Code のみ。Slack App に `files:write` が必要)
+- `<task-notification>` などシステムが差し込む発言と、日本語を含まない長文(200文字以上)は流さない
 - 投稿者名・アイコンは本人のものにする(Slack App に `chat:write.customize` が必要)
 - 本文の上に、リポジトリ・ブランチを薄い文字で添える
 - AI の応答は載せない

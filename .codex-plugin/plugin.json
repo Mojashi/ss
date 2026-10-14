@@ -1,6 +1,6 @@
 {
   "name": "ss",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Codex での発言を Slack チャンネルに流す(全文、gitleaks でマスク、AI 応答は載せない)",
   "hooks": "./hooks/hooks-codex.json"
 }
