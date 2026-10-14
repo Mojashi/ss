@@ -1,10 +1,18 @@
-// UserPromptSubmit: ユーザーの発言を、秘密情報を伏せてチャンネルに流す。
-// 本人の名前・アイコンで投稿し、どのリポジトリ・ブランチでの発言かを薄い文字で添える。
-import { promptOrigin, publishUserText } from "../messages";
-import { SlackChannel } from "../slack";
-import { readHookInput, type HookInput } from "./input";
+// UserPromptSubmit: 人が書いた発言を、本人名義でチャンネルに流す。
+// 画像付きなら、画像が transcript に書かれるのを裏で待ってから流す(hook は待たせない)。
+import { mentionsImages, transcriptLength } from "../attachments";
+import { inBackground } from "../background";
+import { relay } from "../relay";
+import { isWorthRelaying } from "../relay-policy";
+import { readPromptInput } from "./input";
 
-const input = await readHookInput<HookInput & { prompt: string }>();
-const message = await publishUserText(input.prompt);
+const input = await readPromptInput();
 
-await SlackChannel.fromEnv().post(message, { note: await promptOrigin(input.cwd) });
+if (isWorthRelaying(input.prompt)) {
+  if (mentionsImages(input.prompt)) {
+    const since = await transcriptLength(input.transcript_path);
+    inBackground(new URL("./relay-with-images.ts", import.meta.url).pathname, { ...input, since });
+  } else {
+    await relay(input);
+  }
+}
