@@ -14,6 +14,10 @@ function japaneseRatio(s: string): number {
 }
 const isLongEnglish = (prompt: string) => prompt.length >= LONG && japaneseRatio(prompt) < MIN_JAPANESE_RATIO;
 
+// 日本語でも長すぎる発言は、人が書いたものではない(エージェント同士のやりとりや貼り付け)とみなす
+const TOO_LONG = 2000;
+const isTooLong = (prompt: string) => prompt.length > TOO_LONG;
+
 export function isWorthRelaying(prompt: string): boolean {
-  return !isSystemInjected(prompt) && !isLongEnglish(prompt);
+  return !isSystemInjected(prompt) && !isLongEnglish(prompt) && !isTooLong(prompt);
 }

@@ -24,3 +24,8 @@ test("英語が混ざっていても日本語が主の長文は流す", () => {
   expect(prompt.length).toBeGreaterThanOrEqual(200);
   expect(isWorthRelaying(prompt)).toBe(true);
 });
+
+test("日本語でも 2000 文字を超える発言は流さない", () => {
+  expect(isWorthRelaying("あ".repeat(2000))).toBe(true);
+  expect(isWorthRelaying("あ".repeat(2001))).toBe(false);
+});
