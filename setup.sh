@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ss のセットアップ(各メンバー1回だけ)。Claude Code と Codex のうち入っている方に入れる
+# ss のセットアップ(各メンバー1回だけ)。Claude Code / Codex / Kimi Code のうち入っている方に入れる
 # usage: curl -fsSL https://raw.githubusercontent.com/Mojashi/ss/master/setup.sh | bash -s -- <SLACK_CHANNEL_ID>
 set -euo pipefail
 
@@ -16,8 +16,9 @@ if ! command -v bun >/dev/null; then
   export PATH="$HOME/.bun/bin:$PATH"
 fi
 has() { command -v "$1" >/dev/null; }
-has claude || has codex || { echo "claude (Claude Code) か codex が必要です" >&2; exit 1; }
-echo "gitleaks, bun OK / claude: $(has claude && echo あり || echo なし) / codex: $(has codex && echo あり || echo なし)"
+has claude || has codex || has kimi || { echo "claude (Claude Code) / codex / kimi (Kimi Code) のどれかが必要です" >&2; exit 1; }
+yn() { has "$1" && echo あり || echo なし; }
+echo "gitleaks, bun OK / claude: $(yn claude) / codex: $(yn codex) / kimi: $(yn kimi)"
 
 step "Slack bot token"
 token=$(ask -s -p "SS_SLACK_BOT_TOKEN (xoxb-...): "); echo
@@ -62,4 +63,11 @@ fi
 step "完了"
 echo "Claude Code / Codex を再起動すると、発言が Slack に投稿されます。"
 echo "(Codex は初回に hook の信頼確認が出るので許可してください)"
-echo "止めるとき: Claude Code は /plugin disable ss@ss、Codex は codex plugin remove ss@ss"
+if has kimi; then
+  echo
+  echo "Kimi Code はコマンドから入れられないので、kimi の中で次を実行して「Trust and install」を選んでください:"
+  echo "  /plugins install https://github.com/Mojashi/ss"
+  echo "  /reload"
+fi
+echo
+echo "止めるとき: Claude Code は /plugin disable ss@ss、Codex は codex plugin remove ss@ss、Kimi Code は /plugins disable ss"

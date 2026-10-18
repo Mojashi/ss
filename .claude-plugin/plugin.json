@@ -1,6 +1,6 @@
 {
   "name": "ss",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Claude Code での発言を Slack チャンネルに流す(全文、gitleaks でマスク、AI 応答は載せない)",
   "author": {
     "name": "Akihiro Omori"
