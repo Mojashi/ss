@@ -14,6 +14,11 @@ test("システムが差し込むタグ付きメッセージは流さない", ()
   expect(isWorthRelaying("  <local-command-caveat>Caveat: ...</local-command-caveat>")).toBe(false);
 });
 
+test("Orca が差し込む受信通知は流さない", () => {
+  expect(isWorthRelaying("You have 1 orchestration message. Run orca orchestration check --run run_396561c5f011.")).toBe(false);
+  expect(isWorthRelaying("You have 3 orchestration messages. Run orca orchestration check --run run_abc.")).toBe(false);
+});
+
 test("ほとんど英語の長文は、日本語が少し混ざっていても流さない", () => {
   expect(isWorthRelaying("Error: something failed at line 1. ".repeat(10))).toBe(false);
   expect(isWorthRelaying("このエラーなに？ " + "Error: something failed. ".repeat(10))).toBe(false);
