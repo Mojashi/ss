@@ -1,6 +1,6 @@
 {
   "name": "ss",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Kimi Code での発言を Slack チャンネルに流す(全文、gitleaks でマスク、AI 応答は載せない)",
   "homepage": "https://github.com/Mojashi/ss",
   "hooks": [
